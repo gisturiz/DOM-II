@@ -11,16 +11,16 @@ window.addEventListener('load', (event) => {
 let last_known_scroll_position = 0;
 let ticking = false;
 
-function doSomething(scroll_pos) {
+function wereScrolling(scroll_pos) {
   console.log(`We're scrolling!`);
 }
 
-window.addEventListener('scroll', function(e) {
+window.addEventListener('scroll', function(event) {
   last_known_scroll_position = window.scrollY;
 
   if (!ticking) {
     window.requestAnimationFrame(function() {
-      doSomething(last_known_scroll_position);
+        wereScrolling(last_known_scroll_position);
       ticking = false;
     });
 
@@ -54,13 +54,21 @@ navSelect.addEventListener('mouseenter', function(event){
 
 // 6. Keyup
 
-var pressKey = document.getElementById('secureLog');
+var textWindow = document.getElementById('secureLog');
 
-pressKey.addEventListener('keyup', function(event){
+textWindow.addEventListener('keyup', function(event){
     console.log(event.target.value)
 });
 
-// 7. Copy
+// 7. Focus
+
+var textWindow = document.getElementById('secureLog');
+
+textWindow.addEventListener('focus', function(event){
+    event.target.style.background = '#DA70D6';
+})
+
+// 8. Copy
 
 var cannotCopy = document.querySelector('footer p');
 
@@ -68,13 +76,13 @@ cannotCopy.addEventListener('copy', function(event){
     alert("This is copyright protected and you cannot copy!");
 });
 
-// 8. Select
+// 9. Select
 
 window.addEventListener('select', function(event){
     console.log(event.currentTarget.value);
 });
 
-// 9. Resize
+// 10. Resize
 
 window.addEventListener('resize', function(event){
     var w = window.outerWidth;
@@ -83,10 +91,22 @@ window.addEventListener('resize', function(event){
     console.log(`"Window size: width=" + ${w} + ", height=" + ${h}`)
 });
 
-// 10. Focus
+// Prevent Propagation
 
-var focusWindow = document.getElementById('secureLog');
+var mainContent = document.querySelector('.content-pick');
+mainContent.addEventListener('click', function(event){
+    console.log("An alert was triggered by clicking the whole Div!");
+});
 
-focusWindow.addEventListener('focus', function(event){
-    event.target.style.background = '#DA70D6';
+var btnClick = document.getElementById('destButton');
+btnClick.addEventListener('click', function(event){
+    console.log("An alert was triggered by clicking the button!");
+    event.stopPropagation();
+});
+
+// Stop Navigation
+
+var navAnchor = document.querySelector('nav a')
+navAnchor.addEventListener('click', function(event) {
+  event.preventDefault()
 })
